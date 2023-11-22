@@ -54,10 +54,36 @@ const getCustomers = async () => {
   }
 }
 
+const getACustomer = async () => {
+  try {
+    const response = await client.customersApi.searchCustomers({
+      query: {
+        filter: {
+          emailAddress: {
+            fuzzy: "young"
+          }
+        }
+      }
+    });
+  
+    console.log('///////////', response.result);
+    return response.body;
+  } catch(error) {
+    console.log(error);
+  }
+}
+
 app.get('/customers', async (req, res) => {
   // getCustomers().then(customers => res.send(customers))
   getCustomers().then(customers => {
-    console.log('getting customers...', customers)
+    // console.log('getting customers...', customers)
     res.send(customers)
+  })
+})
+
+app.get("/customer", async (req, res) => {
+  getACustomer().then(customer => {
+    console.log('Getting a customer', customer)
+    res.send(customer)
   })
 })
