@@ -17,7 +17,7 @@ const { REACT_APP_API_URL } = process.env
 
 // console.log('REACT_APP_API_URL:', REACT_APP_API_URL)
 // console.log('process.env:', process.env)
-console.log('NODE_ENV:', process.env)
+// console.log('NODE_ENV:', process.env)
 
 // Heroku server connection
 http.createServer(function (request, response) {
@@ -31,13 +31,15 @@ const cors = require('cors')
 app.use(cors())
 
 // app.use(express.static('client'))
-// const bodyParser = require('body-parser')
-// // app.use(express.static('client/index.html'))
 
-// // body-parser
-// app.use(bodyParser.urlencoded({ extended: false }))
-// // Telling body-parser to use JSON
-// app.use(bodyParser.json())
+
+const bodyParser = require('body-parser')
+// app.use(express.static('client/index.html'))
+
+// ======== BODY-PARSER to read post data from client ===========
+app.use(bodyParser.urlencoded({ extended: false }))
+// Telling body-parser to use JSON
+app.use(bodyParser.json())
 
 app.listen(port, () => console.log(`Server running on port: ${port}`))
 
@@ -54,13 +56,13 @@ const getCustomers = async () => {
   }
 }
 
-const getACustomer = async () => {
+const getACustomer = async idValue => {
   try {
     const response = await client.customersApi.searchCustomers({
       query: {
         filter: {
           emailAddress: {
-            fuzzy: "young"
+            fuzzy: idValue
           }
         }
       }
@@ -81,9 +83,10 @@ app.get('/customers', async (req, res) => {
   })
 })
 
-app.get("/customer", async (req, res) => {
-  getACustomer().then(customer => {
-    console.log('Getting a customer', customer)
+app.post("/customer", async (req, res) => {
+  console.log('req:', req.body)
+  getACustomer(req.body.idValue).then(customer => {
+    console.log('Getting a customer ===>', customer)
     res.send(customer)
   })
 })

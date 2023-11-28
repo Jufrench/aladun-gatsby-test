@@ -19,24 +19,31 @@ const handleGetACustomer = async () => {
   const idValue = document.getElementById("input-id").value;
   console.log("idValue:", idValue)
 
-  try {
-    console.log('%chandleGetACustomer!', 'color:goldenrod')
-    const response = await fetch('http://localhost:3001/customer').then(res => res.json())
-    console.log('%cdata:', 'text-decoration:underline', response);
-  } catch(error) {
-    console.log(error)
-  }
-// ==================
-  // const fetchRes = await fetch('http://localhost:3001/customer', {
-  //   method: 'POST',
-  //   credentials: 'same-origin',
-  //   headers: {
-  //       'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify(idValue),
-  // });
+//   try {
+//     console.log('%chandleGetACustomer!', 'color:goldenrod')
+//     const response = await fetch('http://localhost:3001/customer').then(res => res.json())
+//     console.log('%cdata:', 'text-decoration:underline', response);
+//   } catch(error) {
+//     console.log(error)
+//   }
+// // ==================
+  const fetchRes = await fetch('http://localhost:3001/customer', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    // body: JSON.stringify(idValue),
+    // body: {idValue},
+    body: JSON.stringify({ idValue }),
+    // body: idValue,
+    // body: "testing",
+    // body: JSON.stringify({'test': 'value'}),
+    // body: JSON.stringify(test),
+  }).then(res => res.json()).then(res => {
+    console.log('%cres:', 'color:limegreen', res.customers[0]);
+  });
 
-  // console.log('fetchRes:', fetchRes);
 }
 
 const IndexPage = () => {
